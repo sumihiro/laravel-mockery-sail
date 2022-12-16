@@ -8,6 +8,10 @@ use App\Services\HelloWorldService;
 use Mockery;
 use Tests\TestCase;
 
+/**
+ * @runTestsInSeparateProcesses
+ * @preserveGlobalState disabled
+ */
 class MockedEchoTest extends TestCase
 {
     /**
