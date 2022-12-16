@@ -1,0 +1,52 @@
+name: api-sample-sail
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - "api-sample/**"
+  pull_request:
+    branches: [ main ]
+    paths:
+      - "api-sample/**"
+
+defaults:
+  run:
+    working-directory: api-sample
+
+jobs:
+  api-sample-sail:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+
+      - name: install docker
+        run: sudo apt-get update -y && sudo apt install docker.io docker-compose -y
+
+      - name: composer install
+        run: composer install
+
+      - name: cp env
+        run: cp .env.example .env
+
+      - name: start mysql
+        run: ./vendor/bin/sail up -d mysql
+
+      - name: start
+        run: ./vendor/bin/sail up -d
+
+      - name: generate key
+        run: ./vendor/bin/sail artisan key:generate
+
+      - name: migrate
+        run: ./vendor/bin/sail artisan migrate
+
+      - name: test
+        run: ./vendor/bin/sail test
+
+      - name: down
+        run: ./vendor/bin/sail down
