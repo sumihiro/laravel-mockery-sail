@@ -42,9 +42,6 @@ jobs:
       - name: generate key
         run: ./vendor/bin/sail artisan key:generate
 
-      - name: migrate
-        run: ./vendor/bin/sail artisan migrate
-
       - name: test
         run: ./vendor/bin/sail test
 
